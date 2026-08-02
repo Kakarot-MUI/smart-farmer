@@ -1,26 +1,225 @@
 @import "tailwindcss";
 
+/* ===== Earthy Agricultural Color Palette ===== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf8f5;
+  --foreground: #2d1f0e;
+  --farm-green-50: #e8f5e9;
+  --farm-green-100: #c8e6c9;
+  --farm-green-200: #a5d6a7;
+  --farm-green-300: #81c784;
+  --farm-green-400: #66bb6a;
+  --farm-green-500: #4caf50;
+  --farm-green-600: #43a047;
+  --farm-green-700: #388e3c;
+  --farm-green-800: #2e7d32;
+  --farm-green-900: #1b5e20;
+  --farm-brown-50: #efebe9;
+  --farm-brown-100: #d7ccc8;
+  --farm-brown-200: #bcaaa4;
+  --farm-brown-300: #a1887f;
+  --farm-brown-400: #8d6e63;
+  --farm-brown-500: #795548;
+  --farm-brown-600: #6d4c41;
+  --farm-brown-700: #5d4037;
+  --farm-brown-800: #4e342e;
+  --farm-brown-900: #3e2723;
+  --farm-yellow-50: #fffde7;
+  --farm-yellow-100: #fff9c4;
+  --farm-yellow-200: #fff59d;
+  --farm-yellow-300: #fff176;
+  --farm-yellow-400: #ffee58;
+  --farm-yellow-500: #ffeb3b;
+  --farm-yellow-600: #fdd835;
+  --farm-yellow-700: #fbc02d;
+  --farm-yellow-800: #f9a825;
+  --farm-yellow-900: #f57f17;
+  --farm-cream: #faf8f5;
+  --farm-cream-dark: #f0ebe3;
 }
 
+/* ===== Tailwind v4 Theme Extension ===== */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter), 'Inter', sans-serif;
+  --font-display: var(--font-outfit), 'Outfit', sans-serif;
+  --font-mono: monospace;
+
+  /* Farm Greens */
+  --color-farm-green-50: var(--farm-green-50);
+  --color-farm-green-100: var(--farm-green-100);
+  --color-farm-green-200: var(--farm-green-200);
+  --color-farm-green-300: var(--farm-green-300);
+  --color-farm-green-400: var(--farm-green-400);
+  --color-farm-green-500: var(--farm-green-500);
+  --color-farm-green-600: var(--farm-green-600);
+  --color-farm-green-700: var(--farm-green-700);
+  --color-farm-green-800: var(--farm-green-800);
+  --color-farm-green-900: var(--farm-green-900);
+
+  /* Farm Browns */
+  --color-farm-brown-50: var(--farm-brown-50);
+  --color-farm-brown-100: var(--farm-brown-100);
+  --color-farm-brown-200: var(--farm-brown-200);
+  --color-farm-brown-300: var(--farm-brown-300);
+  --color-farm-brown-400: var(--farm-brown-400);
+  --color-farm-brown-500: var(--farm-brown-500);
+  --color-farm-brown-600: var(--farm-brown-600);
+  --color-farm-brown-700: var(--farm-brown-700);
+  --color-farm-brown-800: var(--farm-brown-800);
+  --color-farm-brown-900: var(--farm-brown-900);
+
+  /* Farm Yellows */
+  --color-farm-yellow-50: var(--farm-yellow-50);
+  --color-farm-yellow-100: var(--farm-yellow-100);
+  --color-farm-yellow-200: var(--farm-yellow-200);
+  --color-farm-yellow-300: var(--farm-yellow-300);
+  --color-farm-yellow-400: var(--farm-yellow-400);
+  --color-farm-yellow-500: var(--farm-yellow-500);
+  --color-farm-yellow-600: var(--farm-yellow-600);
+  --color-farm-yellow-700: var(--farm-yellow-700);
+  --color-farm-yellow-800: var(--farm-yellow-800);
+  --color-farm-yellow-900: var(--farm-yellow-900);
+
+  /* Cream */
+  --color-farm-cream: var(--farm-cream);
+  --color-farm-cream-dark: var(--farm-cream-dark);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ===== Base Styles ===== */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ===== Custom Animations ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+  }
+}
+
+@keyframes scanning {
+  0% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(100%); opacity: 0.5; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-scanning {
+  animation: scanning 2s ease-in-out infinite;
+}
+
+.animate-ticker {
+  animation: ticker-scroll 25s linear infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+.animate-bounce-gentle {
+  animation: bounce-gentle 2s ease-in-out infinite;
+}
+
+/* Stagger animation delays for cards */
+.stagger-1 { animation-delay: 0.1s; opacity: 0; }
+.stagger-2 { animation-delay: 0.2s; opacity: 0; }
+.stagger-3 { animation-delay: 0.3s; opacity: 0; }
+.stagger-4 { animation-delay: 0.4s; opacity: 0; }
+.stagger-5 { animation-delay: 0.5s; opacity: 0; }
+
+/* ===== Scrollbar Styling ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--farm-cream-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--farm-green-300);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--farm-green-500);
+}
+
+/* ===== Focus States for Accessibility ===== */
+*:focus-visible {
+  outline: 3px solid var(--farm-green-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ===== Glassmorphism utility ===== */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
