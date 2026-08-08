@@ -14,13 +14,24 @@ import {
   AlertCircle,
   CheckCircle2,
   Loader2,
+  Globe,
+  ChevronDown,
 } from 'lucide-react';
+import { Locale } from '@/i18n/translations';
 import { useAuth } from '@/context/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
 
+const languages = [
+  { code: 'en' as Locale, label: 'English', flag: '🇺🇸' },
+  { code: 'mr' as Locale, label: 'मराठी', flag: '🇮🇳' },
+  { code: 'hi' as Locale, label: 'हिन्दी', flag: '🇮🇳' },
+];
+
 export default function LoginPage() {
   const { login, signup } = useAuth();
-  const { t } = useLanguage();
+  const { t, locale, setLocale } = useLanguage();
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const selectedLang = languages.find((l) => l.code === locale) || languages[0];
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -94,6 +105,44 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-farm-green-800 via-farm-green-900 to-farm-brown-900 px-4 py-8 relative overflow-hidden">
+      {/* Language Selector Top Right */}
+      <div className="absolute top-4 right-4 z-20">
+        <div className="relative">
+          <button
+            onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-lg transition-all duration-200"
+            aria-label={t('nav.selectLanguage')}
+            aria-expanded={langDropdownOpen}
+          >
+            <Globe className="w-4 h-4 text-farm-yellow-400" />
+            <span>{selectedLang.flag} {selectedLang.label}</span>
+            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${langDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {langDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-2xl border border-farm-green-100 py-1.5 animate-fade-in z-50">
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => {
+                    setLocale(lang.code);
+                    setLangDropdownOpen(false);
+                  }}
+                  className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors duration-150 ${
+                    locale === lang.code
+                      ? 'bg-farm-green-50 text-farm-green-700 font-semibold'
+                      : 'text-farm-brown-600 hover:bg-farm-cream-dark'
+                  }`}
+                >
+                  <span className="text-lg">{lang.flag}</span>
+                  {lang.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Decorative background elements */}
       <div className="absolute top-0 left-0 w-72 h-72 bg-farm-green-700/20 rounded-full -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-farm-yellow-700/10 rounded-full translate-x-1/3 translate-y-1/3" />
