@@ -23,6 +23,7 @@ import Link from 'next/link';
 const languages = [
   { code: 'en' as Locale, label: 'English', flag: '🇺🇸' },
   { code: 'mr' as Locale, label: 'मराठी', flag: '🇮🇳' },
+  { code: 'hi' as Locale, label: 'हिन्दी', flag: '🇮🇳' },
 ];
 
 export default function Header() {
