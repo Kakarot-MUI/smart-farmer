@@ -20,6 +20,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from 'recharts';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface PriceData {
   date: string;
@@ -121,8 +122,42 @@ const marketData: CropMarket[] = [
 ];
 
 export default function MarketPrices() {
+  const { t } = useLanguage();
   const [selectedCrop, setSelectedCrop] = useState<CropMarket>(marketData[0]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const getCropName = (englishName: string) => {
+    const map: Record<string, string> = {
+      'Tomato': t('market.tomato'),
+      'Wheat': t('market.wheat'),
+      'Soybean': t('market.soybean'),
+      'Cotton': t('market.cotton'),
+      'Rice (Basmati)': t('market.riceBasmati'),
+    };
+    return map[englishName] || englishName;
+  };
+
+  const getForecastText = (englishName: string, defaultText: string) => {
+    const map: Record<string, string> = {
+      'Tomato': t('market.tomatoForecast'),
+      'Wheat': t('market.wheatForecast'),
+      'Soybean': t('market.soybeanForecast'),
+      'Cotton': t('market.cottonForecast'),
+      'Rice (Basmati)': t('market.riceBasmatiForecast'),
+    };
+    return map[englishName] || defaultText;
+  };
+
+  const getAiRecommendation = (englishName: string, defaultText: string) => {
+    const map: Record<string, string> = {
+      'Tomato': t('market.tomatoRec'),
+      'Wheat': t('market.wheatRec'),
+      'Soybean': t('market.soybeanRec'),
+      'Cotton': t('market.cottonRec'),
+      'Rice (Basmati)': t('market.riceBasmatiRec'),
+    };
+    return map[englishName] || defaultText;
+  };
 
   // Custom tooltip for the chart
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -137,7 +172,7 @@ export default function MarketPrices() {
           </div>
           {data.isForecast && (
             <p className="text-[10px] font-bold text-farm-yellow-600 uppercase mt-1 tracking-wider">
-              AI Forecast
+              {t('market.aiForecast')}
             </p>
           )}
         </div>
@@ -157,10 +192,10 @@ export default function MarketPrices() {
             </div>
             <div>
               <h3 className="font-display text-base font-semibold text-farm-brown-800">
-                Market Trends & AI Forecast
+                {t('market.title')}
               </h3>
               <p className="text-[11px] text-farm-brown-400">
-                Live prices & 3-day prediction
+                {t('market.subtitle')}
               </p>
             </div>
           </div>
@@ -178,7 +213,7 @@ export default function MarketPrices() {
             <div className="flex items-center gap-3">
               <span className="text-2xl">{selectedCrop.emoji}</span>
               <div className="text-left">
-                <p className="font-semibold text-farm-brown-800">{selectedCrop.crop}</p>
+                <p className="font-semibold text-farm-brown-800">{getCropName(selectedCrop.crop)}</p>
                 <div className="flex items-center gap-2 text-sm">
                   <span className="font-bold flex items-center">
                     <IndianRupee className="w-3 h-3" />
@@ -215,7 +250,7 @@ export default function MarketPrices() {
                   <div className="flex items-center gap-3">
                     <span className="text-xl">{item.emoji}</span>
                     <span className={`text-sm font-semibold ${selectedCrop.crop === item.crop ? 'text-farm-green-700' : 'text-farm-brown-700'}`}>
-                      {item.crop}
+                      {getCropName(item.crop)}
                     </span>
                   </div>
                   <span className="text-sm font-bold text-farm-brown-800 flex items-center">
@@ -248,12 +283,11 @@ export default function MarketPrices() {
               />
               <Tooltip content={<CustomTooltip />} />
               
-              {/* Vertical line separating history from forecast */}
               <ReferenceLine 
                 x={selectedCrop.history[6].date} 
                 stroke="#D4A017" 
                 strokeDasharray="4 4" 
-                label={{ position: 'top', value: 'Today', fill: '#D4A017', fontSize: 10, fontWeight: 'bold' }} 
+                label={{ position: 'top', value: t('market.today'), fill: '#D4A017', fontSize: 10, fontWeight: 'bold' }} 
               />
 
               <Line
@@ -273,19 +307,19 @@ export default function MarketPrices() {
         <div className="mt-auto space-y-3">
           <div className="bg-farm-cream/60 rounded-xl p-3.5 border border-farm-brown-100">
             <h4 className="text-xs font-bold text-farm-brown-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-              <BarChart3 className="w-3.5 h-3.5" /> Market Trend
+              <BarChart3 className="w-3.5 h-3.5" /> {t('market.trend')}
             </h4>
             <p className="text-sm text-farm-brown-700 leading-relaxed">
-              {selectedCrop.forecastText}
+              {getForecastText(selectedCrop.crop, selectedCrop.forecastText)}
             </p>
           </div>
 
           <div className="bg-gradient-to-r from-farm-green-50 to-green-50/30 rounded-xl p-3.5 border border-farm-green-200">
             <h4 className="text-xs font-bold text-farm-green-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" /> AI Recommendation
+              <Sparkles className="w-3.5 h-3.5" /> {t('market.aiRecommendation')}
             </h4>
             <p className="text-sm font-medium text-farm-green-800 leading-relaxed">
-              {selectedCrop.aiRecommendation}
+              {getAiRecommendation(selectedCrop.crop, selectedCrop.aiRecommendation)}
             </p>
           </div>
         </div>

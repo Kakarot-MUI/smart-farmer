@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 import { Mic, MicOff, X, Volume2, Loader2, MessageSquare, Bot, User } from 'lucide-react';
 
 // Web Speech API type declarations
@@ -117,6 +118,7 @@ function findResponse(query: string): string {
 }
 
 export default function VoiceAssistant() {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
@@ -243,7 +245,7 @@ export default function VoiceAssistant() {
       console.error('[Voice] Recognition error:', event.error);
       setIsListening(false);
       if (event.error === 'not-allowed') {
-        setTranscript('⚠️ Microphone access denied. Please allow mic permission.');
+        setTranscript(t('voice.micDenied'));
       }
     };
 
@@ -297,9 +299,9 @@ export default function VoiceAssistant() {
                 <Bot className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-display font-bold text-sm">Farm Assistant</h3>
+                <h3 className="font-display font-bold text-sm">{t('voice.title')}</h3>
                 <p className="text-[11px] text-farm-green-200">
-                  {isListening ? '🎤 Listening...' : isSpeaking ? '🔊 Speaking...' : '🟢 Online'}
+                  {isListening ? t('voice.listening') : isSpeaking ? t('voice.speaking') : t('voice.online')}
                 </p>
               </div>
             </div>
@@ -370,7 +372,7 @@ export default function VoiceAssistant() {
           <div className="shrink-0 border-t border-farm-brown-100 bg-white p-4">
             {!speechSupported && (
               <p className="text-xs text-farm-yellow-700 bg-farm-yellow-50 rounded-lg p-2 mb-3 text-center">
-                ⚠️ Voice not supported in this browser. Use the text input below.
+                {t('voice.noSpeechSupport')}
               </p>
             )}
 
@@ -379,7 +381,7 @@ export default function VoiceAssistant() {
               <div className="flex items-center justify-center gap-2 mb-3 py-2 bg-red-50 rounded-xl border border-red-200">
                 <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
                 <span className="text-sm font-semibold text-red-600">
-                  {transcript || 'Listening... speak now'}
+                  {transcript || t('voice.listenPrompt')}
                 </span>
               </div>
             )}
@@ -391,7 +393,7 @@ export default function VoiceAssistant() {
                   type="text"
                   value={transcript}
                   onChange={(e) => setTranscript(e.target.value)}
-                  placeholder="Type or tap mic to speak..."
+                  placeholder={t('voice.placeholder')}
                   className="flex-1 px-4 py-3 rounded-xl border-2 border-farm-brown-200 text-sm bg-farm-cream/50 placeholder:text-farm-brown-300 focus:outline-none focus:border-farm-green-500 focus:ring-2 focus:ring-farm-green-200 transition-all"
                 />
                 <button
@@ -424,7 +426,7 @@ export default function VoiceAssistant() {
             {isSpeaking && (
               <div className="flex items-center justify-center gap-1.5 mt-2 text-xs text-farm-green-600">
                 <Volume2 className="w-3.5 h-3.5 animate-pulse" />
-                Speaking response...
+                {t('voice.speakingResponse')}
               </div>
             )}
           </div>

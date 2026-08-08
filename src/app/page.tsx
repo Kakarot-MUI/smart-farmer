@@ -8,9 +8,11 @@ import FarmLedger from '@/components/features/FarmLedger';
 import DiseaseScanner from '@/components/features/DiseaseScanner';
 import FertilizerCalculator from '@/components/features/FertilizerCalculator';
 import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function Home() {
   const { user } = useAuth();
+  const { t } = useLanguage();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
@@ -25,17 +27,16 @@ export default function Home() {
             <div className="flex items-center gap-2 mb-3">
               <span className="text-3xl">👋</span>
               <p className="text-farm-green-200 text-sm font-medium">
-                Welcome back, {user?.name || 'Farmer'}!
+                {`${t('dashboard.welcomeBack')} ${user?.name || t('dashboard.farmer')}!`}
               </p>
             </div>
             <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 leading-tight">
-              Your Smart Crop Advisory
+              {t('dashboard.heroTitle1')}
               <br />
-              <span className="text-farm-yellow-400">Dashboard</span>
+              <span className="text-farm-yellow-400">{t('dashboard.heroTitle2')}</span>
             </h1>
             <p className="text-farm-green-100 text-sm sm:text-base max-w-xl leading-relaxed">
-              Get AI-powered crop recommendations, optimize fertilizer usage, and
-              detect plant diseases — all in one place.
+              {t('dashboard.heroDescription')}
             </p>
           </div>
         </div>
@@ -45,7 +46,7 @@ export default function Home() {
       <section className="mb-8">
         <div className="flex items-center gap-2 mb-4">
           <h2 className="font-display text-lg font-bold text-farm-brown-800">
-            ⚡ Quick Actions
+            {t('dashboard.quickActions')}
           </h2>
         </div>
         <QuickAccessCards />

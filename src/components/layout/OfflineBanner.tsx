@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 import { WifiOff, Wifi, X } from 'lucide-react';
 
 export default function OfflineBanner() {
+  const { t } = useLanguage();
   const [isOnline, setIsOnline] = useState(true);
   const [showBanner, setShowBanner] = useState(false);
   const [justCameBack, setJustCameBack] = useState(false);
@@ -71,12 +73,12 @@ export default function OfflineBanner() {
       {/* Message */}
       <div className="flex-1 min-w-0">
         <p className="text-sm font-bold">
-          {isOnline && justCameBack ? '✅ Back Online!' : '📡 You are Offline'}
+          {isOnline && justCameBack ? t('offline.backOnline') : t('offline.youAreOffline')}
         </p>
         <p className="text-xs mt-0.5 opacity-80">
           {isOnline && justCameBack
-            ? 'Your connection has been restored.'
-            : 'Don\'t worry — your saved data, recommendations, and ledger still work.'}
+            ? t('offline.connectionRestored')
+            : t('offline.dontWorry')}
         </p>
       </div>
 

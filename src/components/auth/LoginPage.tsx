@@ -16,9 +16,11 @@ import {
   Loader2,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function LoginPage() {
   const { login, signup } = useAuth();
+  const { t } = useLanguage();
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -34,7 +36,7 @@ export default function LoginPage() {
     setError('');
 
     if (!phone || !password) {
-      setError('Please enter your phone number and password.');
+      setError(t('auth.errorPhonePassword'));
       return;
     }
 
@@ -44,7 +46,7 @@ export default function LoginPage() {
 
     const success = login(phone, password);
     if (!success) {
-      setError('Invalid phone number or password. Please try again.');
+      setError(t('auth.errorInvalidLogin'));
     }
     setLoading(false);
   };
@@ -54,22 +56,22 @@ export default function LoginPage() {
     setError('');
 
     if (!name || !phone || !password) {
-      setError('Please fill in all required fields.');
+      setError(t('auth.errorRequired'));
       return;
     }
 
     if (phone.length < 10) {
-      setError('Please enter a valid 10-digit phone number.');
+      setError(t('auth.errorInvalidPhone'));
       return;
     }
 
     if (password.length < 4) {
-      setError('Password must be at least 4 characters.');
+      setError(t('auth.errorShortPassword'));
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError(t('auth.errorPasswordMismatch'));
       return;
     }
 
@@ -78,7 +80,7 @@ export default function LoginPage() {
 
     const success = signup(name, phone, village, password);
     if (!success) {
-      setError('This phone number is already registered. Please login instead.');
+      setError(t('auth.errorAlreadyRegistered'));
     }
     setLoading(false);
   };
@@ -103,10 +105,10 @@ export default function LoginPage() {
           <Leaf className="w-10 h-10 text-white" strokeWidth={2} />
         </div>
         <h1 className="font-display text-3xl sm:text-4xl font-bold text-white mb-1">
-          CropAdvisor
+          {t('app.name')}
         </h1>
         <p className="text-farm-green-300 text-sm">
-          Smart Farming Made Simple
+          {t('app.taglineLong')}
         </p>
       </div>
 
@@ -124,7 +126,7 @@ export default function LoginPage() {
               }`}
             >
               <LogIn className="w-5 h-5" />
-              Login
+              {t('common.login')}
             </button>
             <button
               onClick={() => switchMode()}
@@ -135,7 +137,7 @@ export default function LoginPage() {
               }`}
             >
               <UserPlus className="w-5 h-5" />
-              Sign Up
+              {t('common.signup')}
             </button>
           </div>
 
@@ -143,12 +145,12 @@ export default function LoginPage() {
             {/* Welcome Text */}
             <div className="text-center mb-6">
               <h2 className="font-display text-xl font-bold text-farm-brown-800 mb-1">
-                {mode === 'login' ? '👋 Welcome Back!' : '🌱 Create Account'}
+                {mode === 'login' ? t('auth.welcomeBack') : t('auth.createAccount')}
               </h2>
               <p className="text-sm text-farm-brown-400">
                 {mode === 'login'
-                  ? 'Enter your phone number and password'
-                  : 'Join thousands of smart farmers'}
+                  ? t('auth.enterPhone')
+                  : t('auth.joinFarmers')}
               </p>
             </div>
 
@@ -166,7 +168,7 @@ export default function LoginPage() {
               {mode === 'signup' && (
                 <div className="mb-4 animate-fade-in">
                   <label htmlFor="auth-name" className="block text-sm font-semibold text-farm-brown-700 mb-2">
-                    Full Name *
+                    {t('auth.fullName')}
                   </label>
                   <div className="relative">
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-farm-brown-400" />
@@ -175,7 +177,7 @@ export default function LoginPage() {
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="e.g. Rajesh Kumar"
+                      placeholder={t('auth.namePlaceholder')}
                       className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-farm-brown-200 text-base font-medium bg-farm-cream/50 placeholder:text-farm-brown-300 focus:outline-none focus:border-farm-green-500 focus:ring-2 focus:ring-farm-green-200 transition-all"
                     />
                   </div>
@@ -185,7 +187,7 @@ export default function LoginPage() {
               {/* Phone Number */}
               <div className="mb-4">
                 <label htmlFor="auth-phone" className="block text-sm font-semibold text-farm-brown-700 mb-2">
-                  Phone Number *
+                  {t('auth.phoneNumber')}
                 </label>
                 <div className="relative">
                   <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-farm-brown-400" />
@@ -194,7 +196,7 @@ export default function LoginPage() {
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                    placeholder="e.g. 9876543210"
+                    placeholder={t('auth.phonePlaceholder')}
                     maxLength={10}
                     className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-farm-brown-200 text-base font-medium bg-farm-cream/50 placeholder:text-farm-brown-300 focus:outline-none focus:border-farm-green-500 focus:ring-2 focus:ring-farm-green-200 transition-all"
                   />
@@ -205,7 +207,7 @@ export default function LoginPage() {
               {mode === 'signup' && (
                 <div className="mb-4 animate-fade-in">
                   <label htmlFor="auth-village" className="block text-sm font-semibold text-farm-brown-700 mb-2">
-                    Village / Town
+                    {t('auth.villageTown')}
                   </label>
                   <div className="relative">
                     <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-farm-brown-400" />
@@ -214,7 +216,7 @@ export default function LoginPage() {
                       type="text"
                       value={village}
                       onChange={(e) => setVillage(e.target.value)}
-                      placeholder="e.g. Nashik, Maharashtra"
+                      placeholder={t('auth.villagePlaceholder')}
                       className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-farm-brown-200 text-base font-medium bg-farm-cream/50 placeholder:text-farm-brown-300 focus:outline-none focus:border-farm-green-500 focus:ring-2 focus:ring-farm-green-200 transition-all"
                     />
                   </div>
@@ -224,7 +226,7 @@ export default function LoginPage() {
               {/* Password */}
               <div className="mb-4">
                 <label htmlFor="auth-password" className="block text-sm font-semibold text-farm-brown-700 mb-2">
-                  Password *
+                  {t('auth.password')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-farm-brown-400" />
@@ -233,7 +235,7 @@ export default function LoginPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
+                    placeholder={t('auth.passwordPlaceholder')}
                     className="w-full pl-12 pr-12 py-3.5 rounded-xl border-2 border-farm-brown-200 text-base font-medium bg-farm-cream/50 placeholder:text-farm-brown-300 focus:outline-none focus:border-farm-green-500 focus:ring-2 focus:ring-farm-green-200 transition-all"
                   />
                   <button
@@ -251,7 +253,7 @@ export default function LoginPage() {
               {mode === 'signup' && (
                 <div className="mb-4 animate-fade-in">
                   <label htmlFor="auth-confirm-password" className="block text-sm font-semibold text-farm-brown-700 mb-2">
-                    Confirm Password *
+                    {t('auth.confirmPassword')}
                   </label>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-farm-brown-400" />
@@ -260,7 +262,7 @@ export default function LoginPage() {
                       type={showPassword ? 'text' : 'password'}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="Re-enter your password"
+                      placeholder={t('auth.confirmPasswordPlaceholder')}
                       className={`w-full pl-12 pr-12 py-3.5 rounded-xl border-2 text-base font-medium bg-farm-cream/50 placeholder:text-farm-brown-300 focus:outline-none focus:ring-2 transition-all ${
                         confirmPassword && confirmPassword === password
                           ? 'border-green-400 focus:border-green-500 focus:ring-green-200'
@@ -286,7 +288,7 @@ export default function LoginPage() {
                 {loading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    {mode === 'login' ? 'Logging in...' : 'Creating account...'}
+                    {mode === 'login' ? t('auth.loggingIn') : t('auth.creatingAccount')}
                   </>
                 ) : (
                   <>
@@ -295,7 +297,7 @@ export default function LoginPage() {
                     ) : (
                       <UserPlus className="w-5 h-5" />
                     )}
-                    {mode === 'login' ? 'Login' : 'Create Account'}
+                    {mode === 'login' ? t('common.login') : t('auth.createAccountBtn')}
                   </>
                 )}
               </button>
@@ -305,22 +307,22 @@ export default function LoginPage() {
             <p className="text-center mt-5 text-sm text-farm-brown-400">
               {mode === 'login' ? (
                 <>
-                  New farmer?{' '}
+                  {t('auth.newFarmer')}{' '}
                   <button
                     onClick={switchMode}
                     className="text-farm-green-600 font-semibold hover:text-farm-green-700 hover:underline transition-colors"
                   >
-                    Create an account
+                    {t('auth.createAnAccount')}
                   </button>
                 </>
               ) : (
                 <>
-                  Already registered?{' '}
+                  {t('auth.alreadyRegistered')}{' '}
                   <button
                     onClick={switchMode}
                     className="text-farm-green-600 font-semibold hover:text-farm-green-700 hover:underline transition-colors"
                   >
-                    Login here
+                    {t('auth.loginHere')}
                   </button>
                 </>
               )}
@@ -331,7 +333,7 @@ export default function LoginPage() {
         {/* Demo Hint */}
         <div className="text-center mt-6 animate-fade-in" style={{ animationDelay: '0.3s' }}>
           <p className="text-farm-green-300/70 text-xs">
-            💡 This is a demo. Sign up with any phone number and password to get started.
+            {t('auth.demoHint')}
           </p>
         </div>
       </div>

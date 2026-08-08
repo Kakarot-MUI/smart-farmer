@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
+import { Locale } from '@/i18n/translations';
 import {
   Leaf,
   Menu,
@@ -19,24 +21,24 @@ import {
 import Link from 'next/link';
 
 const languages = [
-  { code: 'en', label: 'English', flag: '🇺🇸' },
-  { code: 'hi', label: 'हिन्दी', flag: '🇮🇳' },
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
-];
-
-const navLinks = [
-  { href: '/', label: 'Dashboard', icon: Home },
-  { href: '#crop-recommendation', label: 'Predict Crop', icon: Sprout },
-  { href: '#farm-ledger', label: 'Farm Ledger', icon: BookOpen },
-  { href: '#fertilizer', label: 'Fertilizer', icon: FlaskConical },
-  { href: '#disease', label: 'Scan Disease', icon: ScanLine },
+  { code: 'en' as Locale, label: 'English', flag: '🇺🇸' },
+  { code: 'mr' as Locale, label: 'मराठी', flag: '🇮🇳' },
 ];
 
 export default function Header() {
   const { user, logout } = useAuth();
+  const { t, locale, setLocale } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
-  const [selectedLang, setSelectedLang] = useState(languages[0]);
+  const selectedLang = languages.find(l => l.code === locale) || languages[0];
+
+  const navLinks = [
+    { href: '/', label: t('nav.dashboard'), icon: Home },
+    { href: '#crop-recommendation', label: t('nav.predictCrop'), icon: Sprout },
+    { href: '#farm-ledger', label: t('nav.farmLedger'), icon: BookOpen },
+    { href: '#fertilizer', label: t('nav.fertilizer'), icon: FlaskConical },
+    { href: '#disease', label: t('nav.scanDisease'), icon: ScanLine },
+  ];
 
   return (
     <header className="sticky top-0 z-50 glass border-b border-farm-green-100">
@@ -49,10 +51,10 @@ export default function Header() {
             </div>
             <div className="hidden sm:block">
               <h1 className="font-display text-lg font-bold text-farm-brown-800 leading-tight">
-                CropAdvisor
+                {t('app.name')}
               </h1>
               <p className="text-[10px] text-farm-brown-400 font-medium tracking-wider uppercase">
-                Smart Farming
+                {t('app.tagline')}
               </p>
             </div>
           </Link>
@@ -78,7 +80,7 @@ export default function Header() {
               <button
                 onClick={() => setLangDropdownOpen(!langDropdownOpen)}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-farm-brown-600 hover:bg-farm-green-50 transition-all duration-200 border border-farm-brown-100"
-                aria-label="Select language"
+                aria-label={t('nav.selectLanguage')}
                 aria-expanded={langDropdownOpen}
               >
                 <Globe className="w-4 h-4 text-farm-green-600" />
@@ -93,11 +95,11 @@ export default function Header() {
                     <button
                       key={lang.code}
                       onClick={() => {
-                        setSelectedLang(lang);
+                        setLocale(lang.code);
                         setLangDropdownOpen(false);
                       }}
                       className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors duration-150 ${
-                        selectedLang.code === lang.code
+                        locale === lang.code
                           ? 'bg-farm-green-50 text-farm-green-700 font-semibold'
                           : 'text-farm-brown-600 hover:bg-farm-cream-dark'
                       }`}
@@ -132,7 +134,7 @@ export default function Header() {
             <button
               className="md:hidden p-2 rounded-lg text-farm-brown-600 hover:bg-farm-green-50 transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-label={mobileMenuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -172,7 +174,7 @@ export default function Header() {
                     className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
-                    Logout
+                    {t('common.logout')}
                   </button>
                 </div>
               </div>

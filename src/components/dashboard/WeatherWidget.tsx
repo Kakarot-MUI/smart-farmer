@@ -10,6 +10,7 @@ import {
   ArrowUp,
   ArrowDown,
 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 const weatherData = {
   location: 'Nashik, Maharashtra',
@@ -31,6 +32,8 @@ const weatherData = {
 };
 
 export default function WeatherWidget() {
+  const { t } = useLanguage();
+
   return (
     <div className="bg-gradient-to-br from-farm-green-700 via-farm-green-800 to-farm-green-900 rounded-2xl p-5 sm:p-6 text-white shadow-xl relative overflow-hidden">
       {/* Decorative circles */}
@@ -42,7 +45,7 @@ export default function WeatherWidget() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-farm-green-200 text-xs font-medium uppercase tracking-wider mb-0.5">
-              Current Weather
+              {t('weather.current')}
             </p>
             <h3 className="font-display text-base sm:text-lg font-semibold">
               📍 {weatherData.location}
@@ -73,10 +76,10 @@ export default function WeatherWidget() {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
           {[
-            { icon: Droplets, label: 'Humidity', value: `${weatherData.humidity}%`, color: 'text-blue-300' },
-            { icon: Wind, label: 'Wind', value: `${weatherData.windSpeed} km/h`, color: 'text-farm-green-200' },
-            { icon: Eye, label: 'Visibility', value: `${weatherData.visibility} km`, color: 'text-farm-yellow-300' },
-            { icon: CloudRain, label: 'Rain', value: `${weatherData.rainChance}%`, color: 'text-blue-200' },
+            { icon: Droplets, label: t('weather.humidity'), value: `${weatherData.humidity}%`, color: 'text-blue-300' },
+            { icon: Wind, label: t('weather.wind'), value: `${weatherData.windSpeed} km/h`, color: 'text-farm-green-200' },
+            { icon: Eye, label: t('weather.visibility'), value: `${weatherData.visibility} km`, color: 'text-farm-yellow-300' },
+            { icon: CloudRain, label: t('weather.rain'), value: `${weatherData.rainChance}%`, color: 'text-blue-200' },
           ].map((stat) => (
             <div
               key={stat.label}
@@ -92,7 +95,7 @@ export default function WeatherWidget() {
         {/* 5-Day Forecast */}
         <div>
           <h4 className="text-xs font-medium text-farm-green-200 uppercase tracking-wider mb-3">
-            5-Day Forecast
+            {t('weather.forecast')}
           </h4>
           <div className="flex gap-2 overflow-x-auto pb-1">
             {weatherData.forecast.map((day, i) => (
@@ -105,7 +108,7 @@ export default function WeatherWidget() {
                 }`}
               >
                 <p className="text-[11px] font-medium text-farm-green-200 mb-1.5">
-                  {day.day}
+                  {i === 0 ? t('weather.today') : day.day}
                 </p>
                 <day.icon className="w-5 h-5 mx-auto mb-1.5 text-farm-yellow-300" />
                 <p className="text-sm font-bold">{day.temp}°</p>

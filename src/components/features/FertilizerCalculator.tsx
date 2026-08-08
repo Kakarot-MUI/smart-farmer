@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 import {
   FlaskConical,
   Calculator,
@@ -55,6 +56,7 @@ const cropOptions: CropRequirement[] = [
 ];
 
 export default function FertilizerCalculator() {
+  const { t } = useLanguage();
   const [selectedCrop, setSelectedCrop] = useState('');
   const [currentN, setCurrentN] = useState('');
   const [currentP, setCurrentP] = useState('');
@@ -108,7 +110,7 @@ export default function FertilizerCalculator() {
         totalKg: ureaKg,
         bags: ureaBags,
         bagSize: 50,
-        purpose: 'Supplies Nitrogen for leaf growth and green color',
+        purpose: t('fert.ureaPurpose'),
         pricePerBag: 267,
       });
     }
@@ -120,7 +122,7 @@ export default function FertilizerCalculator() {
         totalKg: dapKg,
         bags: dapBags,
         bagSize: 50,
-        purpose: 'Supplies Phosphorus for root growth and flowering',
+        purpose: t('fert.dapPurpose'),
         pricePerBag: 1350,
       });
     }
@@ -132,7 +134,7 @@ export default function FertilizerCalculator() {
         totalKg: mopKg,
         bags: mopBags,
         bagSize: 50,
-        purpose: 'Supplies Potassium for fruit quality and disease resistance',
+        purpose: t('fert.mopPurpose'),
         pricePerBag: 870,
       });
     }
@@ -140,12 +142,12 @@ export default function FertilizerCalculator() {
     // If all nutrients are sufficient
     if (fertilizers.length === 0) {
       fertilizers.push({
-        name: 'No additional fertilizer needed!',
+        name: t('fert.noFertNeeded'),
         emoji: '✅',
         totalKg: 0,
         bags: 0,
         bagSize: 0,
-        purpose: 'Your soil already has sufficient nutrients for this crop',
+        purpose: t('fert.soilSufficient'),
         pricePerBag: 0,
       });
     }
@@ -153,9 +155,9 @@ export default function FertilizerCalculator() {
     const totalCost = fertilizers.reduce((sum, f) => sum + f.bags * f.pricePerBag, 0);
 
     const schedule = [
-      '📅 Basal dose: Apply all DAP + MOP + 1/3 Urea before sowing/transplanting',
-      '📅 1st Top dressing: Apply 1/3 Urea at 25-30 days after sowing',
-      '📅 2nd Top dressing: Apply remaining 1/3 Urea at 50-55 days after sowing',
+      t('fert.schedule1'),
+      t('fert.schedule2'),
+      t('fert.schedule3'),
     ];
 
     setResult({
@@ -190,10 +192,10 @@ export default function FertilizerCalculator() {
             </div>
             <div>
               <h2 className="font-display text-xl font-bold text-farm-brown-800">
-                🧪 Precision Fertilizer Calculator
+                {t('fert.title')}
               </h2>
               <p className="text-sm text-farm-brown-400 mt-0.5">
-                Get exact fertilizer bags and dosage for your farm
+                {t('fert.subtitle')}
               </p>
             </div>
           </div>
@@ -205,8 +207,7 @@ export default function FertilizerCalculator() {
           <div className="flex items-start gap-3 bg-farm-yellow-50 border border-farm-yellow-200 rounded-xl p-4 mb-6">
             <Info className="w-5 h-5 text-farm-yellow-700 mt-0.5 shrink-0" />
             <p className="text-sm text-farm-brown-700 leading-relaxed">
-              Select your target crop and enter your current soil NPK levels.
-              We&apos;ll calculate exactly how many bags of each fertilizer you need to buy.
+              {t('fert.infoBanner')}
             </p>
           </div>
 
@@ -214,7 +215,7 @@ export default function FertilizerCalculator() {
           <div className="mb-5">
             <label className="flex items-center gap-2 text-sm font-semibold text-farm-brown-700 mb-2">
               <Wheat className="w-4 h-4 text-farm-yellow-600" />
-              Target Crop
+              {t('fert.targetCrop')}
             </label>
             <div className="relative">
               <button
@@ -228,7 +229,7 @@ export default function FertilizerCalculator() {
                     {selectedCropData.name}
                   </span>
                 ) : (
-                  <span className="text-farm-brown-300">Select a crop...</span>
+                  <span className="text-farm-brown-300">{t('fert.selectCrop')}</span>
                 )}
                 <ChevronDown className={`w-5 h-5 text-farm-brown-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
               </button>
@@ -264,10 +265,10 @@ export default function FertilizerCalculator() {
           {/* Current Soil NPK + Farm Size */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
             {[
-              { key: 'N', label: 'Current N', value: currentN, setter: setCurrentN, color: 'text-farm-green-600', unit: 'kg/ha' },
-              { key: 'P', label: 'Current P', value: currentP, setter: setCurrentP, color: 'text-farm-yellow-600', unit: 'kg/ha' },
-              { key: 'K', label: 'Current K', value: currentK, setter: setCurrentK, color: 'text-farm-brown-500', unit: 'kg/ha' },
-              { key: 'size', label: 'Farm Size', value: farmSize, setter: setFarmSize, color: 'text-farm-green-700', unit: 'acres' },
+              { key: 'N', label: t('fert.currentN'), value: currentN, setter: setCurrentN, color: 'text-farm-green-600', unit: 'kg/ha' },
+              { key: 'P', label: t('fert.currentP'), value: currentP, setter: setCurrentP, color: 'text-farm-yellow-600', unit: 'kg/ha' },
+              { key: 'K', label: t('fert.currentK'), value: currentK, setter: setCurrentK, color: 'text-farm-brown-500', unit: 'kg/ha' },
+              { key: 'size', label: t('fert.farmSize'), value: farmSize, setter: setFarmSize, color: 'text-farm-green-700', unit: 'acres' },
             ].map((field) => (
               <div key={field.key}>
                 <label htmlFor={`fert-${field.key}`} className={`block text-sm font-semibold text-farm-brown-700 mb-2`}>
@@ -302,12 +303,12 @@ export default function FertilizerCalculator() {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Calculating...
+                  {t('fert.calculating')}
                 </>
               ) : (
                 <>
                   <Calculator className="w-5 h-5" />
-                  Calculate Fertilizer
+                  {t('fert.calculateBtn')}
                 </>
               )}
             </button>
@@ -318,7 +319,7 @@ export default function FertilizerCalculator() {
                 className="flex items-center justify-center gap-2 px-6 py-4 rounded-xl border-2 border-farm-brown-200 text-farm-brown-600 font-semibold hover:bg-farm-brown-50 transition-all active:scale-[0.98]"
               >
                 <RotateCcw className="w-4 h-4" />
-                Reset
+                {t('common.reset')}
               </button>
             )}
           </div>
@@ -332,10 +333,10 @@ export default function FertilizerCalculator() {
                 <FlaskConical className="w-8 h-8 text-farm-yellow-600 animate-bounce-gentle" />
               </div>
               <h3 className="font-display text-lg font-bold text-farm-brown-800 mb-1">
-                Calculating Fertilizer Requirements...
+                {t('fert.calculatingTitle')}
               </h3>
               <p className="text-sm text-farm-brown-400">
-                Comparing your soil levels with optimal crop requirements
+                {t('fert.calculatingSubtitle')}
               </p>
             </div>
           </div>
@@ -350,7 +351,7 @@ export default function FertilizerCalculator() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5" />
-                    <span className="font-bold text-sm">Fertilizer Plan Ready!</span>
+                    <span className="font-bold text-sm">{t('fert.planReady')}</span>
                   </div>
                   <span className="text-sm">
                     {result.emoji} {result.crop} · {result.farmSize} acre{result.farmSize > 1 ? 's' : ''}
@@ -381,7 +382,7 @@ export default function FertilizerCalculator() {
                             <Package className="w-5 h-5 text-farm-yellow-600" />
                             {fert.bags}
                             <span className="text-sm font-normal text-farm-brown-400">
-                              bag{fert.bags > 1 ? 's' : ''}
+                              {fert.bags > 1 ? t('fert.bags') : t('fert.bag')}
                             </span>
                           </div>
                           <p className="text-xs text-farm-brown-400">
@@ -399,7 +400,7 @@ export default function FertilizerCalculator() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Scale className="w-5 h-5 text-farm-green-600" />
-                        <span className="font-bold text-farm-brown-700">Estimated Total Cost</span>
+                        <span className="font-bold text-farm-brown-700">{t('fert.estimatedCost')}</span>
                       </div>
                       <div className="flex items-center text-2xl font-bold text-farm-green-700">
                         <IndianRupee className="w-5 h-5" />
@@ -407,7 +408,7 @@ export default function FertilizerCalculator() {
                       </div>
                     </div>
                     <p className="text-xs text-farm-brown-400 mt-1.5">
-                      *Prices based on government-subsidized rates. Actual cost may vary.
+                      {t('fert.priceNote')}
                     </p>
                   </div>
                 )}
@@ -416,7 +417,7 @@ export default function FertilizerCalculator() {
                 <div>
                   <h4 className="flex items-center gap-2 font-bold text-farm-brown-700 text-sm mb-3">
                     <Sprout className="w-4 h-4 text-farm-green-600" />
-                    Application Schedule
+                    {t('fert.schedule')}
                   </h4>
                   <div className="space-y-2">
                     {result.schedule.map((step, i) => (

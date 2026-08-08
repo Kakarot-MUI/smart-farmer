@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 import {
   Plus,
   Minus,
@@ -26,29 +27,33 @@ interface LedgerEntry {
   date: string;
 }
 
-const incomeCategories = [
-  { label: 'Sold Crops', emoji: '🌾' },
-  { label: 'Sold Vegetables', emoji: '🥬' },
-  { label: 'Sold Fruits', emoji: '🍎' },
-  { label: 'Dairy / Milk', emoji: '🥛' },
-  { label: 'Government Subsidy', emoji: '🏛️' },
-  { label: 'Other Income', emoji: '💰' },
-];
 
-const expenseCategories = [
-  { label: 'Seeds', emoji: '🌱' },
-  { label: 'Fertilizer', emoji: '🧪' },
-  { label: 'Pesticide', emoji: '🐛' },
-  { label: 'Tractor / Equipment', emoji: '🚜' },
-  { label: 'Labour / Workers', emoji: '👷' },
-  { label: 'Water / Irrigation', emoji: '💧' },
-  { label: 'Transport', emoji: '🚛' },
-  { label: 'Other Expense', emoji: '📦' },
-];
 
 const STORAGE_KEY = 'cropadvisor-farm-ledger';
 
 export default function FarmLedger() {
+  const { t } = useLanguage();
+
+  const incomeCategories = [
+    { label: t('ledger.cat.soldCrops'), emoji: '🌾' },
+    { label: t('ledger.cat.soldVegetables'), emoji: '🥬' },
+    { label: t('ledger.cat.soldFruits'), emoji: '🍎' },
+    { label: t('ledger.cat.dairyMilk'), emoji: '🥛' },
+    { label: t('ledger.cat.govSubsidy'), emoji: '🏛️' },
+    { label: t('ledger.cat.otherIncome'), emoji: '💰' },
+  ];
+
+  const expenseCategories = [
+    { label: t('ledger.cat.seeds'), emoji: '🌱' },
+    { label: t('ledger.cat.fertilizer'), emoji: '🧪' },
+    { label: t('ledger.cat.pesticide'), emoji: '🐛' },
+    { label: t('ledger.cat.tractorEquip'), emoji: '🚜' },
+    { label: t('ledger.cat.labourWorkers'), emoji: '👷' },
+    { label: t('ledger.cat.waterIrrigation'), emoji: '💧' },
+    { label: t('ledger.cat.transport'), emoji: '🚛' },
+    { label: t('ledger.cat.otherExpense'), emoji: '📦' },
+  ];
+
   const [entries, setEntries] = useState<LedgerEntry[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<'income' | 'expense'>('income');
@@ -139,10 +144,10 @@ export default function FarmLedger() {
               </div>
               <div>
                 <h2 className="font-display text-xl font-bold text-farm-brown-800">
-                  📒 Farm Ledger
+                  {t('ledger.title')}
                 </h2>
                 <p className="text-sm text-farm-brown-400 mt-0.5">
-                  Track your income and expenses easily
+                  {t('ledger.subtitle')}
                 </p>
               </div>
             </div>
@@ -157,7 +162,7 @@ export default function FarmLedger() {
               <div className="flex items-center gap-2 mb-2">
                 <ArrowDownCircle className="w-5 h-5 text-green-600" />
                 <span className="text-sm font-medium text-green-700">
-                  Total Income
+                  {t('ledger.totalIncome')}
                 </span>
               </div>
               <div className="flex items-center text-2xl font-bold text-green-800">
@@ -171,7 +176,7 @@ export default function FarmLedger() {
               <div className="flex items-center gap-2 mb-2">
                 <ArrowUpCircle className="w-5 h-5 text-red-500" />
                 <span className="text-sm font-medium text-red-600">
-                  Total Expense
+                  {t('ledger.totalExpense')}
                 </span>
               </div>
               <div className="flex items-center text-2xl font-bold text-red-700">
@@ -191,7 +196,7 @@ export default function FarmLedger() {
               <div className="flex items-center gap-2 mb-2">
                 <Wallet className="w-5 h-5 text-farm-brown-600" />
                 <span className="text-sm font-medium text-farm-brown-600">
-                  {profit >= 0 ? 'Profit ✅' : 'Loss ❌'}
+                  {profit >= 0 ? t('ledger.profit') : t('ledger.loss')}
                 </span>
               </div>
               <div
@@ -218,7 +223,7 @@ export default function FarmLedger() {
               className="w-full flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-gradient-to-r from-farm-green-600 to-farm-green-700 text-white font-bold text-base shadow-lg shadow-farm-green-200/50 hover:from-farm-green-700 hover:to-farm-green-800 hover:shadow-xl transition-all duration-300 active:scale-[0.98] mb-6"
             >
               <Plus className="w-5 h-5" />
-              Add New Entry
+              {t('ledger.addEntry')}
             </button>
           )}
 
@@ -227,7 +232,7 @@ export default function FarmLedger() {
             <div className="bg-farm-cream rounded-xl border border-farm-brown-200 p-5 mb-6 animate-fade-in-up">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-display text-lg font-bold text-farm-brown-800">
-                  Add Entry
+                  {t('ledger.addEntryTitle')}
                 </h3>
                 <button
                   onClick={() => setShowForm(false)}
@@ -249,7 +254,7 @@ export default function FarmLedger() {
                   }`}
                 >
                   <Plus className="w-5 h-5" />
-                  Income
+                  {t('ledger.income')}
                 </button>
                 <button
                   onClick={() => { setFormType('expense'); setCategory(''); }}
@@ -260,14 +265,14 @@ export default function FarmLedger() {
                   }`}
                 >
                   <Minus className="w-5 h-5" />
-                  Expense
+                  {t('ledger.expense')}
                 </button>
               </div>
 
               {/* Category Selection */}
               <div className="mb-4">
                 <label className="block text-sm font-semibold text-farm-brown-700 mb-2">
-                  Category
+                  {t('ledger.category')}
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {currentCategories.map((cat) => (
@@ -296,7 +301,7 @@ export default function FarmLedger() {
                   htmlFor="ledger-amount"
                   className="block text-sm font-semibold text-farm-brown-700 mb-2"
                 >
-                  Amount (₹)
+                  {t('ledger.amount')}
                 </label>
                 <div className="relative">
                   <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-farm-brown-400" />
@@ -318,14 +323,14 @@ export default function FarmLedger() {
                   htmlFor="ledger-description"
                   className="block text-sm font-semibold text-farm-brown-700 mb-2"
                 >
-                  Note (optional)
+                  {t('ledger.note')}
                 </label>
                 <input
                   id="ledger-description"
                   type="text"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="e.g. Sold 5 quintals of wheat at Mandi"
+                  placeholder={t('ledger.notePlaceholder')}
                   className="w-full px-4 py-3.5 rounded-xl border-2 border-farm-brown-200 text-base bg-white placeholder:text-farm-brown-300 focus:outline-none focus:border-farm-green-500 focus:ring-2 focus:ring-farm-green-200 transition-all"
                 />
               </div>
@@ -336,7 +341,7 @@ export default function FarmLedger() {
                   htmlFor="ledger-date"
                   className="block text-sm font-semibold text-farm-brown-700 mb-2"
                 >
-                  Date
+                  {t('ledger.date')}
                 </label>
                 <div className="relative">
                   <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-farm-brown-400 pointer-events-none" />
@@ -361,7 +366,7 @@ export default function FarmLedger() {
                 }`}
               >
                 <Plus className="w-5 h-5" />
-                {formType === 'income' ? 'Add Income' : 'Add Expense'}
+                {formType === 'income' ? t('ledger.addIncome') : t('ledger.addExpense')}
               </button>
             </div>
           )}
@@ -379,7 +384,7 @@ export default function FarmLedger() {
                       : 'bg-farm-cream border border-farm-brown-200 text-farm-brown-500 hover:bg-farm-brown-50'
                   }`}
                 >
-                  {f === 'all' ? '📋 All' : f === 'income' ? '💰 Income' : '💸 Expense'}
+                  {f === 'all' ? t('ledger.all') : f === 'income' ? t('ledger.incomeFilter') : t('ledger.expenseFilter')}
                 </button>
               ))}
             </div>
@@ -390,10 +395,10 @@ export default function FarmLedger() {
             <div className="text-center py-10">
               <div className="text-5xl mb-3">📒</div>
               <h3 className="font-display text-lg font-bold text-farm-brown-700 mb-1">
-                No entries yet
+                {t('ledger.noEntries')}
               </h3>
               <p className="text-sm text-farm-brown-400">
-                Start by adding your first income or expense
+                {t('ledger.noEntriesSubtitle')}
               </p>
             </div>
           ) : (
@@ -444,13 +449,13 @@ export default function FarmLedger() {
                           onClick={() => handleDelete(entry.id)}
                           className="px-3 py-1.5 rounded-lg bg-red-500 text-white text-xs font-bold hover:bg-red-600 transition-colors"
                         >
-                          Delete
+                          {t('common.delete')}
                         </button>
                         <button
                           onClick={() => setDeleteConfirm(null)}
                           className="px-3 py-1.5 rounded-lg bg-farm-brown-200 text-farm-brown-600 text-xs font-bold hover:bg-farm-brown-300 transition-colors"
                         >
-                          Cancel
+                          {t('common.cancel')}
                         </button>
                       </div>
                     ) : (

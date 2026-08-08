@@ -7,9 +7,11 @@ import VoiceAssistant from '@/components/features/VoiceAssistant';
 import OfflineBanner from '@/components/layout/OfflineBanner';
 import ServiceWorkerRegistration from '@/components/layout/ServiceWorkerRegistration';
 import { Loader2, Leaf } from 'lucide-react';
+import { LanguageProvider, useLanguage } from '@/context/LanguageContext';
 
 function AppContent({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
+  const { t } = useLanguage();
 
   // Loading state
   if (isLoading) {
@@ -19,7 +21,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
           <Leaf className="w-8 h-8 text-white" />
         </div>
         <Loader2 className="w-6 h-6 text-farm-green-600 animate-spin mb-2" />
-        <p className="text-sm text-farm-brown-400 font-medium">Loading...</p>
+        <p className="text-sm text-farm-brown-400 font-medium">{t('common.loading')}</p>
       </div>
     );
   }
@@ -40,21 +42,21 @@ function AppContent({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-2">
               <span className="text-2xl">🌾</span>
               <span className="font-display font-bold text-white text-lg">
-                CropAdvisor
+                {t('app.name')}
               </span>
             </div>
             <p className="text-sm text-farm-brown-400 text-center">
-              © 2026 CropAdvisor — Empowering Farmers with Smart Technology
+              {t('footer.copyright')}
             </p>
             <div className="flex items-center gap-4 text-sm">
               <a href="#" className="hover:text-farm-green-300 transition-colors">
-                About
+                {t('common.about')}
               </a>
               <a href="#" className="hover:text-farm-green-300 transition-colors">
-                Help
+                {t('common.help')}
               </a>
               <a href="#" className="hover:text-farm-green-300 transition-colors">
-                Contact
+                {t('common.contact')}
               </a>
             </div>
           </div>
@@ -67,10 +69,12 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <AuthProvider>
-      <ServiceWorkerRegistration />
-      <AppContent>{children}</AppContent>
-      <OfflineBanner />
-    </AuthProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <ServiceWorkerRegistration />
+        <AppContent>{children}</AppContent>
+        <OfflineBanner />
+      </AuthProvider>
+    </LanguageProvider>
   );
 }

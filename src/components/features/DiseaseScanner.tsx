@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, type DragEvent } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 import {
   Camera,
   Upload,
@@ -97,6 +98,7 @@ const mockDiseases: Disease[] = [
 ];
 
 export default function DiseaseScanner() {
+  const { t } = useLanguage();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [fileName, setFileName] = useState('');
   const [scanning, setScanning] = useState(false);
@@ -185,10 +187,10 @@ export default function DiseaseScanner() {
             </div>
             <div>
               <h2 className="font-display text-xl font-bold text-farm-brown-800">
-                🔬 Disease & Pest Scanner
+                {t('disease.title')}
               </h2>
               <p className="text-sm text-farm-brown-400 mt-0.5">
-                Upload a leaf photo for instant AI diagnosis
+                {t('disease.subtitle')}
               </p>
             </div>
           </div>
@@ -211,11 +213,10 @@ export default function DiseaseScanner() {
                 <ImageIcon className="w-10 h-10 text-farm-brown-400" />
               </div>
               <h3 className="font-display text-lg font-bold text-farm-brown-700 mb-2">
-                {isDragOver ? 'Drop your image here!' : 'Upload a Leaf Photo'}
+                {isDragOver ? t('disease.dropHere') : t('disease.uploadPhoto')}
               </h3>
               <p className="text-sm text-farm-brown-400 mb-6 max-w-md mx-auto">
-                Take a clear photo of the affected leaf or drag and drop an image here.
-                Supported formats: JPG, PNG, WEBP
+                {t('disease.uploadHint')}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -225,7 +226,7 @@ export default function DiseaseScanner() {
                   className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-farm-green-600 to-farm-green-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
                 >
                   <Upload className="w-5 h-5" />
-                  Choose File
+                  {t('disease.chooseFile')}
                 </button>
 
                 {/* Camera Capture */}
@@ -234,7 +235,7 @@ export default function DiseaseScanner() {
                   className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border-2 border-farm-brown-200 text-farm-brown-600 font-semibold hover:bg-farm-brown-50 transition-all duration-200 active:scale-[0.98]"
                 >
                   <Camera className="w-5 h-5" />
-                  Take Photo
+                  {t('disease.takePhoto')}
                 </button>
               </div>
 
@@ -289,10 +290,10 @@ export default function DiseaseScanner() {
                     <div className="bg-black/60 rounded-xl px-6 py-4 text-center">
                       <Loader2 className="w-8 h-8 text-farm-green-400 animate-spin mx-auto mb-2" />
                       <p className="text-white font-bold text-sm">
-                        Analyzing leaf... {scanProgress}%
+                        {t('disease.analyzing')} {scanProgress}%
                       </p>
                       <p className="text-white/60 text-xs mt-1">
-                        Checking against 50+ disease patterns
+                        {t('disease.checkingPatterns')}
                       </p>
                     </div>
                   </div>
@@ -322,7 +323,7 @@ export default function DiseaseScanner() {
                     className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-farm-green-600 to-farm-green-700 text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
                   >
                     <ScanLine className="w-5 h-5" />
-                    Scan for Disease
+                    {t('disease.scanBtn')}
                   </button>
                 </div>
               )}
@@ -339,14 +340,14 @@ export default function DiseaseScanner() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-farm-brown-600 truncate">{fileName}</p>
-                  <p className="text-xs text-farm-brown-400">Scan complete</p>
+                  <p className="text-xs text-farm-brown-400">{t('disease.scanComplete')}</p>
                 </div>
                 <button
                   onClick={handleReset}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-farm-brown-200 text-sm font-medium text-farm-brown-500 hover:bg-farm-brown-50 transition-colors"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  New Scan
+                  {t('disease.newScan')}
                 </button>
               </div>
 
@@ -355,9 +356,9 @@ export default function DiseaseScanner() {
                 {/* Diagnosis Header */}
                 <div className="px-5 py-4 bg-red-500 text-white flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5" />
-                  <span className="font-bold text-sm">Disease Detected</span>
+                  <span className="font-bold text-sm">{t('disease.detected')}</span>
                   <span className={`ml-auto px-2.5 py-0.5 rounded-full text-xs font-bold border ${severityColor(result.severity)}`}>
-                    {result.severity} Severity
+                    {result.severity} {t('disease.severity')}
                   </span>
                 </div>
 
@@ -387,7 +388,7 @@ export default function DiseaseScanner() {
                   <div className="bg-white rounded-xl p-4 border border-farm-brown-100 mb-5">
                     <div className="flex items-center gap-2 mb-2">
                       <Bug className="w-4 h-4 text-red-500" />
-                      <h4 className="text-sm font-bold text-farm-brown-700">About This Disease</h4>
+                      <h4 className="text-sm font-bold text-farm-brown-700">{t('disease.aboutDisease')}</h4>
                     </div>
                     <p className="text-sm text-farm-brown-600 leading-relaxed">{result.description}</p>
                   </div>
@@ -400,7 +401,7 @@ export default function DiseaseScanner() {
                     >
                       <div className="flex items-center gap-2">
                         <Leaf className="w-5 h-5 text-green-600" />
-                        <span className="font-bold text-green-800">Organic Treatments</span>
+                        <span className="font-bold text-green-800">{t('disease.organicTreatments')}</span>
                       </div>
                       {showOrganic ? <ChevronUp className="w-4 h-4 text-green-600" /> : <ChevronDown className="w-4 h-4 text-green-600" />}
                     </button>
@@ -424,7 +425,7 @@ export default function DiseaseScanner() {
                     >
                       <div className="flex items-center gap-2">
                         <FlaskConical className="w-5 h-5 text-blue-600" />
-                        <span className="font-bold text-blue-800">Chemical Treatments</span>
+                        <span className="font-bold text-blue-800">{t('disease.chemicalTreatments')}</span>
                       </div>
                       {showChemical ? <ChevronUp className="w-4 h-4 text-blue-600" /> : <ChevronDown className="w-4 h-4 text-blue-600" />}
                     </button>
@@ -444,7 +445,7 @@ export default function DiseaseScanner() {
                   <div className="bg-farm-yellow-50 rounded-xl p-4 border border-farm-yellow-200">
                     <div className="flex items-center gap-2 mb-2">
                       <ShieldCheck className="w-5 h-5 text-farm-yellow-700" />
-                      <h4 className="font-bold text-farm-yellow-800 text-sm">Prevention Tips</h4>
+                      <h4 className="font-bold text-farm-yellow-800 text-sm">{t('disease.preventionTips')}</h4>
                     </div>
                     <p className="text-sm text-farm-brown-600 leading-relaxed">{result.prevention}</p>
                   </div>

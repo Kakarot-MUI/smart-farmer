@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 import {
   Sprout,
   Loader2,
@@ -67,65 +68,69 @@ const mockResults: Record<string, CropResult> = {
   },
 };
 
-const inputFields = [
-  {
-    key: 'nitrogen' as const,
-    label: 'Nitrogen (N)',
-    icon: Zap,
-    unit: 'kg/ha',
-    placeholder: 'e.g. 85',
-    min: 0,
-    max: 200,
-    color: 'farm-green',
-    tip: 'Available nitrogen content in your soil',
-  },
-  {
-    key: 'phosphorus' as const,
-    label: 'Phosphorus (P)',
-    icon: FlaskConical,
-    unit: 'kg/ha',
-    placeholder: 'e.g. 45',
-    min: 0,
-    max: 150,
-    color: 'farm-yellow',
-    tip: 'Available phosphorus in your soil',
-  },
-  {
-    key: 'potassium' as const,
-    label: 'Potassium (K)',
-    icon: TestTubeDiagonal,
-    unit: 'kg/ha',
-    placeholder: 'e.g. 40',
-    min: 0,
-    max: 210,
-    color: 'farm-brown',
-    tip: 'Available potassium in your soil',
-  },
-  {
-    key: 'ph' as const,
-    label: 'pH Level',
-    icon: Gauge,
-    unit: 'pH',
-    placeholder: 'e.g. 6.5',
-    min: 0,
-    max: 14,
-    color: 'farm-green',
-    tip: 'Soil acidity/alkalinity (0-14 scale)',
-  },
-  {
-    key: 'rainfall' as const,
-    label: 'Rainfall',
-    icon: CloudRain,
-    unit: 'mm',
-    placeholder: 'e.g. 200',
-    min: 0,
-    max: 3000,
-    color: 'farm-green',
-    tip: 'Average annual rainfall in your region',
-  },
-];
+
 
 export default function CropRecommendation() {
+  const { t } = useLanguage();
+
+  const inputFields = [
+    {
+      key: 'nitrogen' as const,
+      label: t('crop.nitrogen'),
+      icon: Zap,
+      unit: 'kg/ha',
+      placeholder: 'e.g. 85',
+      min: 0,
+      max: 200,
+      color: 'farm-green',
+      tip: t('crop.nitrogenTip'),
+    },
+    {
+      key: 'phosphorus' as const,
+      label: t('crop.phosphorus'),
+      icon: FlaskConical,
+      unit: 'kg/ha',
+      placeholder: 'e.g. 45',
+      min: 0,
+      max: 150,
+      color: 'farm-yellow',
+      tip: t('crop.phosphorusTip'),
+    },
+    {
+      key: 'potassium' as const,
+      label: t('crop.potassium'),
+      icon: TestTubeDiagonal,
+      unit: 'kg/ha',
+      placeholder: 'e.g. 40',
+      min: 0,
+      max: 210,
+      color: 'farm-brown',
+      tip: t('crop.potassiumTip'),
+    },
+    {
+      key: 'ph' as const,
+      label: t('crop.phLevel'),
+      icon: Gauge,
+      unit: 'pH',
+      placeholder: 'e.g. 6.5',
+      min: 0,
+      max: 14,
+      color: 'farm-green',
+      tip: t('crop.phTip'),
+    },
+    {
+      key: 'rainfall' as const,
+      label: t('crop.rainfall'),
+      icon: CloudRain,
+      unit: 'mm',
+      placeholder: 'e.g. 200',
+      min: 0,
+      max: 3000,
+      color: 'farm-green',
+      tip: t('crop.rainfallTip'),
+    },
+  ];
+
   const [formData, setFormData] = useState<FormData>({
     nitrogen: '',
     phosphorus: '',
@@ -145,15 +150,15 @@ export default function CropRecommendation() {
     inputFields.forEach((field) => {
       const value = formData[field.key];
       if (!value || value.trim() === '') {
-        newErrors[field.key] = `${field.label} is required`;
+        newErrors[field.key] = `${field.label} ${t('crop.required')}`;
         isValid = false;
       } else {
         const num = parseFloat(value);
         if (isNaN(num)) {
-          newErrors[field.key] = 'Must be a number';
+          newErrors[field.key] = t('crop.mustBeNumber');
           isValid = false;
         } else if (num < field.min || num > field.max) {
-          newErrors[field.key] = `Must be between ${field.min} and ${field.max}`;
+          newErrors[field.key] = `${t('crop.mustBeBetween')} ${field.min} ${t('crop.and')} ${field.max}`;
           isValid = false;
         }
       }
@@ -210,10 +215,10 @@ export default function CropRecommendation() {
             </div>
             <div>
               <h2 className="font-display text-xl font-bold text-farm-brown-800">
-                🌱 Crop Recommendation Engine
+                {t('crop.title')}
               </h2>
               <p className="text-sm text-farm-brown-400 mt-0.5">
-                Enter your soil data and get AI-powered crop predictions
+                {t('crop.subtitle')}
               </p>
             </div>
           </div>
@@ -225,7 +230,7 @@ export default function CropRecommendation() {
           <div className="flex items-start gap-3 bg-farm-green-50 border border-farm-green-200 rounded-xl p-4 mb-6">
             <Info className="w-5 h-5 text-farm-green-600 mt-0.5 shrink-0" />
             <p className="text-sm text-farm-green-800 leading-relaxed">
-              Enter your soil test values below. You can get these from your local agricultural office or a soil testing kit. All fields are required.
+              {t('crop.infoBanner')}
             </p>
           </div>
 
@@ -294,12 +299,12 @@ export default function CropRecommendation() {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Analyzing Soil Data...
+                  {t('crop.analyzingSoil')}
                 </>
               ) : (
                 <>
                   <Sprout className="w-5 h-5" />
-                  Get Recommendation
+                  {t('crop.getRecommendation')}
                 </>
               )}
             </button>
@@ -311,7 +316,7 @@ export default function CropRecommendation() {
                 className="flex items-center justify-center gap-2 px-6 py-4 rounded-xl border-2 border-farm-brown-200 text-farm-brown-600 font-semibold hover:bg-farm-brown-50 transition-all duration-200 active:scale-[0.98]"
               >
                 <RotateCcw className="w-4 h-4" />
-                Reset
+                {t('common.reset')}
               </button>
             )}
           </div>
@@ -325,10 +330,10 @@ export default function CropRecommendation() {
                 <Leaf className="w-8 h-8 text-farm-green-600 animate-spin-slow" />
               </div>
               <h3 className="font-display text-lg font-bold text-farm-brown-800 mb-2">
-                Analyzing Your Soil Data...
+                {t('crop.analyzingTitle')}
               </h3>
               <p className="text-sm text-farm-brown-500">
-                Our AI is matching your soil profile with optimal crop databases
+                {t('crop.analyzingSubtitle')}
               </p>
               <div className="mt-4 w-48 h-2 mx-auto bg-farm-green-100 rounded-full overflow-hidden">
                 <div className="h-full bg-gradient-to-r from-farm-green-400 to-farm-green-600 rounded-full animate-[scanning_2s_ease-in-out_infinite]" />
@@ -346,7 +351,7 @@ export default function CropRecommendation() {
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5" />
                   <span className="text-sm font-semibold">
-                    Analysis Complete — Best Match Found!
+                    {t('crop.analysisComplete')}
                   </span>
                 </div>
               </div>
@@ -367,7 +372,7 @@ export default function CropRecommendation() {
                         />
                       </div>
                       <span className="text-lg font-bold text-farm-green-700">
-                        {result.confidence}% Match
+                        {result.confidence}% {t('crop.match')}
                       </span>
                     </div>
                   </div>
@@ -377,7 +382,7 @@ export default function CropRecommendation() {
                 <div className="bg-white rounded-xl p-4 border border-farm-green-100 mb-5">
                   <h4 className="text-sm font-bold text-farm-brown-700 mb-2 flex items-center gap-1.5">
                     <Info className="w-4 h-4 text-farm-green-600" />
-                    Why This Crop?
+                    {t('crop.whyThisCrop')}
                   </h4>
                   <p className="text-sm text-farm-brown-600 leading-relaxed">
                     {result.explanation}
@@ -387,9 +392,9 @@ export default function CropRecommendation() {
                 {/* Quick Stats */}
                 <div className="grid grid-cols-3 gap-3 mb-5">
                   {[
-                    { label: 'Season', value: result.season, icon: '📅' },
-                    { label: 'Water Needs', value: result.waterNeeds, icon: '💧' },
-                    { label: 'Soil Type', value: result.soilType, icon: '🏔️' },
+                    { label: t('crop.season'), value: result.season, icon: '📅' },
+                    { label: t('crop.waterNeeds'), value: result.waterNeeds, icon: '💧' },
+                    { label: t('crop.soilType'), value: result.soilType, icon: '🏔️' },
                   ].map((stat) => (
                     <div
                       key={stat.label}
@@ -409,7 +414,7 @@ export default function CropRecommendation() {
                 {/* Alternatives */}
                 <div>
                   <h4 className="text-sm font-bold text-farm-brown-700 mb-3">
-                    Other Suitable Crops
+                    {t('crop.otherCrops')}
                   </h4>
                   <div className="flex gap-3">
                     {result.alternatives.map((alt) => (
@@ -422,7 +427,7 @@ export default function CropRecommendation() {
                           {alt.name}
                         </p>
                         <p className="text-xs text-farm-green-600 font-medium">
-                          {alt.confidence}% match
+                          {alt.confidence}% {t('crop.match').toLowerCase()}
                         </p>
                       </div>
                     ))}
