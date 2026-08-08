@@ -67,17 +67,17 @@ export default function LoginPage() {
     setError('');
 
     if (!name || !phone || !password) {
-      setError(t('auth.errorRequired'));
+      setError(t('auth.errorFillFields'));
       return;
     }
 
     if (phone.length < 10) {
-      setError(t('auth.errorInvalidPhone'));
+      setError(t('auth.errorPhoneInvalid'));
       return;
     }
 
     if (password.length < 4) {
-      setError(t('auth.errorShortPassword'));
+      setError(t('auth.errorPasswordShort'));
       return;
     }
 
@@ -91,7 +91,7 @@ export default function LoginPage() {
 
     const success = signup(name, phone, village, password);
     if (!success) {
-      setError(t('auth.errorAlreadyRegistered'));
+      setError(t('auth.errorPhoneExists'));
     }
     setLoading(false);
   };

@@ -143,7 +143,7 @@ export default function MarketPrices() {
       'Wheat': t('market.wheatForecast'),
       'Soybean': t('market.soybeanForecast'),
       'Cotton': t('market.cottonForecast'),
-      'Rice (Basmati)': t('market.riceBasmatiForecast'),
+      'Rice (Basmati)': t('market.riceForecast'),
     };
     return map[englishName] || defaultText;
   };
@@ -154,7 +154,7 @@ export default function MarketPrices() {
       'Wheat': t('market.wheatRec'),
       'Soybean': t('market.soybeanRec'),
       'Cotton': t('market.cottonRec'),
-      'Rice (Basmati)': t('market.riceBasmatiRec'),
+      'Rice (Basmati)': t('market.riceRec'),
     };
     return map[englishName] || defaultText;
   };
